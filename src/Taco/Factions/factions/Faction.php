@@ -1,5 +1,6 @@
 <?php namespace Taco\Factions\factions;
 
+use pocketmine\Server;
 use Taco\Factions\factions\objects\FactionBank;
 use Taco\Factions\factions\objects\FactionClaims;
 use Taco\Factions\factions\objects\FactionInvite;
@@ -109,6 +110,19 @@ class Faction {
     /*** @return FactionBank */
     public function getBank() : FactionBank {
         return $this->bank;
+    }
+
+    /**
+     * Sends a message to all online faction members
+     *
+     * @param string $message
+     * @return void
+     */
+    public function sendMessageToOnlineMembers(string $message) : void {
+        foreach ($this->getMembers() as $member) {
+            if (is_null($player = Server::getInstance()->getPlayerExact($member->getName()))) continue;
+            $player->sendMessage($message);
+        }
     }
 
 }

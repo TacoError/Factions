@@ -23,6 +23,7 @@ class FactionRole {
      * @return bool
      */
     public function hasPermission(int $permission) : bool {
+        if (in_array(-1, $this->permissions)) return true;
         return in_array($permission, $this->permissions);
     }
 

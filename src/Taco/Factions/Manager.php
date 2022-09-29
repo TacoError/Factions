@@ -9,6 +9,7 @@ class Manager {
 
     public function __construct() {
         self::$factionManager = new FactionManager();
+        self::$factionManager->prepare();
     }
 
     /*** @return FactionManager */

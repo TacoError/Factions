@@ -2,6 +2,7 @@
 
 class FactionPermissionTypes {
 
+    public const PERMISSION_ALL = -1;
     public const PERMISSION_BUILD = 0;
     public const PERMISSION_PLACE = 1;
     public const PERMISSION_INVITE = 2;
