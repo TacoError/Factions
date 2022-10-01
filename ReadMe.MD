@@ -4,9 +4,10 @@ Factions core made for CenturyMC by TacoError.
 
 # Permissions
 
-| Permission  | Usage                                  |
-|-------------|----------------------------------------|
-| core.groups | Add or remove groups from<br/>players. |
+| Permission  | Usage                                     |
+|-------------|-------------------------------------------|
+| core.groups | Add or remove groups from<br/>players.    |
+|core.permissions| Edit a players individual<br/>permissions |
 
 # Groups
 

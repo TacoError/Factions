@@ -10,3 +10,5 @@ main: Taco\Factions\Main
 permissions:
   core.groups:
     default: op
+  core.permissions:
+    default: op

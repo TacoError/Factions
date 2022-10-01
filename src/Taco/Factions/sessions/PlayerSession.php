@@ -1,5 +1,7 @@
 <?php namespace Taco\Factions\sessions;
 
+use JsonException;
+use pocketmine\permission\PermissionAttachment;
 use pocketmine\player\Player;
 use pocketmine\utils\Config;
 use Taco\Factions\groups\Group;
@@ -28,31 +30,82 @@ class PlayerSession {
     /** @var array<string> */
     private array $permissions;
 
-    /** @var array */
+    /** @var array<Group> */
     private array $groups;
+
+    /** @var array<PermissionAttachment> */
+    private array $attatchments = [];
 
     public function __construct(Player $player, Config $store) {
         $this->player = $player;
         $this->store = $store;
 
         $gm = Manager::getGroupManager();
-        if ($store->exists($player->getName())) {
-            $data = $store->get($player->getName());
-            $this->kills = $data["kills"] ?? 0;
-            $this->deaths = $data["deaths"] ?? 0;
-            $this->killStreak = $data["killStreak"] ?? 0;
-            $this->bestKillStreak = $data["bestKillStreak"] ?? 0;
-            $groups = $data["groups"] ?? [$gm->getDefaultGroup()->getName()];
-            $this->groups = array_map(fn($iGroup) => $gm->getGroupFromName($iGroup), $groups);
-            $this->permissions = $data["permissions"] ?? [];
-            return;
-        }
+        $data = $store->exists($player->getName()) ? $store->get($player->getName()) : [];
+        $this->kills = $data["kills"] ?? 0;
+        $this->deaths = $data["deaths"] ?? 0;
+        $this->killStreak = $data["killStreak"] ?? 0;
+        $this->bestKillStreak = $data["bestKillStreak"] ?? 0;
+        $groups = $data["groups"] ?? [$gm->getDefaultGroup()->getName()];
+        $this->groups = array_map(fn($iGroup) => $gm->getGroupFromName($iGroup), $groups);
+        $this->permissions = $data["permissions"] ?? [];
 
+        $this->reloadPermissions();
+    }
+
+    /***
+     * @return void
+     * @throws JsonException
+     */
+    public function save() : void {
+        $this->unloadPermissions();
+        $store = $this->store;
+        $store->set($this->player->getName(), [
+
+        ]);
+        $store->save();
+    }
+
+    /**
+     * Returns all available permissions (groups and singular)
+     *
+     * @return array
+     */
+    public function getPermissions() : array {
+        $permissions = [];
+        foreach ($this->groups as $group) {
+            foreach ($group->getPermissions() as $permission) {
+                if (in_array($permission, $permissions)) continue;
+                $permissions[] = $permission;
+            }
+        }
+        foreach ($this->permissions as $permission) {
+            if (in_array($permission, $permissions)) continue;
+            $permissions[] = $permissions;
+        }
+        return $permissions;
     }
 
     /*** @return void */
-    public function save() : void {
+    public function unloadPermissions() : void {
+        foreach ($this->attatchments as $attachment) {
+            $this->player->removeAttachment($attachment);
+        }
+    }
 
+    /**
+     * Reloads all attachments, singular permissions,
+     * and group permissions
+     *
+     * @return void
+     */
+    public function reloadPermissions() : void {
+        $this->unloadPermissions();
+        $permissions = $this->getPermissions();
+        foreach ($permissions as $permission) {
+            $attachment = $this->player->addAttachment($permission);
+            $this->attatchments[] = $attachment;
+        }
     }
 
     /**
@@ -61,6 +114,7 @@ class PlayerSession {
      */
     public function removePermission(string $permission) : void {
         $this->permissions = array_diff($this->permissions, [$permission]);
+        $this->reloadPermissions();
     }
 
     /**
@@ -69,6 +123,7 @@ class PlayerSession {
      */
     public function addPermission(string $permission) : void {
         $this->permissions[] = $permission;
+        $this->reloadPermissions();
     }
 
     /**
@@ -87,6 +142,7 @@ class PlayerSession {
      */
     public function addGroup(Group $group) : void {
         $this->groups[] = $group;
+        $this->reloadPermissions();
     }
 
     /**
@@ -97,6 +153,7 @@ class PlayerSession {
      */
     public function removeGroup(Group $group) : void {
         $this->groups = array_filter($this->groups, fn($iGroup) => $iGroup->getName() !== $group->getName());
+        $this->reloadPermissions();
     }
 
     /*** @return array<Group> */
