@@ -1,6 +1,7 @@
 <?php namespace Taco\Factions;
 
 use JsonException;
+use muqsit\invmenu\InvMenuHandler;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\SingletonTrait;
 
@@ -16,6 +17,10 @@ class Main extends PluginBase {
     }
 
     public function onEnable() : void {
+        if (!InvMenuHandler::isRegistered()) {
+            InvMenuHandler::register($this);
+        }
+
         $this->saveDefaultConfig();
         self::$config = $this->getConfig()->getAll();
 

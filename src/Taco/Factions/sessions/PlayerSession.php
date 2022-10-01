@@ -33,6 +33,9 @@ class PlayerSession {
     /** @var array<Group> */
     private array $groups;
 
+    /** @var array<string, int> */
+    private array $kitCoolDowns;
+
     /** @var array<PermissionAttachment> */
     private array $attatchments = [];
 
@@ -49,6 +52,7 @@ class PlayerSession {
         $groups = $data["groups"] ?? [$gm->getDefaultGroup()->getName()];
         $this->groups = array_map(fn($iGroup) => $gm->getGroupFromName($iGroup), $groups);
         $this->permissions = $data["permissions"] ?? [];
+        $this->kitCoolDowns = $data["kitCoolDowns"] ?? [];
 
         $this->reloadPermissions();
     }
@@ -64,6 +68,26 @@ class PlayerSession {
 
         ]);
         $store->save();
+    }
+
+    /**
+     * Sets the kits coolDown as time()
+     *
+     * @param string $kit
+     * @return void
+     */
+    public function setKitCoolDown(string $kit) : void {
+        $this->kitCoolDowns[$kit] = time();
+    }
+
+    /**
+     * Returns the kit coolDown otherwise 0
+     *
+     * @param string $kit
+     * @return int
+     */
+    public function getKitCoolDown(string $kit) : int {
+        return $this->kitCoolDowns[$kit] ?? 0;
     }
 
     /**
