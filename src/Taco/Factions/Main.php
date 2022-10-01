@@ -8,12 +8,18 @@ class Main extends PluginBase {
 
     use SingletonTrait;
 
+    /** @var array<string, mixed> */
+    public static array $config;
+
     public function onLoad() : void {
         self::setInstance($this);
     }
 
     public function onEnable() : void {
-        new Manager();
+        $this->saveDefaultConfig();
+        self::$config = $this->getConfig()->getAll();
+
+        new Manager(self::$config);
     }
 
     /*** @throws JsonException */

@@ -50,7 +50,7 @@ abstract class CoreCommand extends Command {
      */
     public function subCommandCheck(CommandSender|Player $sender, string $command, array $args = []) : bool {
         foreach ($this->subCommands as $sub) {
-            if (!$sub->getName() == $command) continue;
+            if ($sub->getName() !== $command) continue;
             if ($sender instanceof Player && $sub->getPermission() !== "" && !$sender->hasPermission($sub->getPermission())) continue;
             $sub->execute($sender, $args);
             return true;

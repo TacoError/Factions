@@ -2,7 +2,6 @@
 
 use pocketmine\command\CommandSender;
 use pocketmine\player\Player;
-use pocketmine\utils\TextFormat;
 use Taco\Factions\commands\CoreSubCommand;
 use Taco\Factions\factions\FactionManager;
 use Taco\Factions\utils\Format;
@@ -25,7 +24,7 @@ class FactionCreateCommand extends CoreSubCommand {
             return;
         }
         $name = $args[0];
-        if (!is_null($reason = TextUtils::validateRegularText($name, "faction name", 3, 12 . Format::PREFIX_FACTIONS_BAD))) {
+        if (!is_null($reason = TextUtils::validateRegularText($name, "faction name", 3, 12, Format::PREFIX_FACTIONS_BAD))) {
             $sender->sendMessage($reason);
             return;
         }

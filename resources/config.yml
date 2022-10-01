@@ -1,0 +1,5 @@
+groups:
+  Guest:
+    authority: 1
+    fancyName: "§l§7Guest"
+    permissions: []

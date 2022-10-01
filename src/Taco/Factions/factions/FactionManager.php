@@ -17,7 +17,7 @@ use Taco\Factions\utils\Format;
 
 class FactionManager {
 
-    /** @var array<Faction> */
+    /** @var array<string, Faction> */
     private array $factions = [];
 
     /** @var Config */
@@ -61,7 +61,7 @@ class FactionManager {
                 );
             }
 
-            $this->factions[] = new Faction(
+            $this->factions[$name] = new Faction(
                 $name,
                 $data["description"],
                 $data["tag"],
@@ -120,13 +120,8 @@ class FactionManager {
      */
     public function disbandFaction(Player $owner) : void {
         $faction = $this->getPlayerFaction($owner);
-        $faction->sendMessageToOnlineMembers(Format::PREFIX_FACTIONS . "e Your faction leader has disbanded the faction.");
-        $list = [];
-        foreach ($this->factions as $iFaction) {
-            if ($iFaction->getName() == $faction->getName()) continue;
-            $list[] = $faction;
-        }
-        $this->factions = $list;
+        $faction->sendMessageToOnlineMembers(Format::PREFIX_FACTIONS . "eYour faction leader has disbanded the faction.");
+        unset($this->factions[$faction->getName()]);
     }
 
     /**
@@ -138,7 +133,7 @@ class FactionManager {
      * @return void
      */
     public function createFaction(string $name, string $tag, string $ownerName) : void {
-        $this->factions[] = new Faction(
+        $this->factions[$name] = new Faction(
             $name,
             "A Generic Faction Description",
             $tag,
@@ -160,10 +155,7 @@ class FactionManager {
      * @return Faction|null
      */
     public function getFactionFromName(string $name) : ?Faction {
-        foreach ($this->factions as $faction) {
-            if ($faction->getName() !== $name) continue;
-            return $faction;
-        }
+        if (isset($this->factions[$name])) return $this->factions[$name];
         return null;
     }
 

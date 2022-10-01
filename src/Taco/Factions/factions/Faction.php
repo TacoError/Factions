@@ -125,4 +125,19 @@ class Faction {
         }
     }
 
+    /**
+     * Returns a FactionMember if they exist otherwise
+     * it returns null
+     *
+     * @param string $name
+     * @return FactionMember|null
+     */
+    public function getMemberFromName(string $name) : ?FactionMember {
+        foreach ($this->members as $member) {
+            if ($member->getName() !== $name) continue;
+            return $member;
+        }
+        return null;
+    }
+
 }
