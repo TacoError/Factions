@@ -54,6 +54,13 @@ a need to use MySQL or SQLite as Minecraft Bedrock Edition servers
 do not scale anywhere near enough for it to be worth the time spent
 doing said thing.
 
+# Configuration
+
+In the event the server shuts down saying "UPDATE CONFIG" do not panic. Simply goto the
+"resources" folder in this repository, and see what is added in there opposed to the one you have, 
+and add it to your config.yml (after doing so, update cfg-version to the next version). This is simply so that the server does not break in the future due to a
+older config version.
+
 # Requirements
 
 - InvMenu ([Link](https://github.com/Muqsit/InvMenu))
