@@ -5,6 +5,7 @@ use pocketmine\utils\TextFormat;
 use Taco\Factions\commands\CoreCommand;
 use Taco\Factions\factions\commands\base\FactionCreateCommand;
 use Taco\Factions\factions\commands\base\FactionDisbandCommand;
+use Taco\Factions\factions\commands\base\FactionHelpCommand;
 use Taco\Factions\factions\commands\invites\FactionAcceptInviteCommand;
 use Taco\Factions\factions\commands\invites\FactionInviteCommand;
 use Taco\Factions\factions\commands\invites\FactionInvitesCommand;
@@ -21,7 +22,8 @@ class FactionCommand extends CoreCommand {
             new FactionDisbandCommand($manager),
             new FactionInviteCommand($manager),
             new FactionAcceptInviteCommand($manager),
-            new FactionInvitesCommand($manager)
+            new FactionInvitesCommand($manager),
+            new FactionHelpCommand($this)
         ]);
     }
 

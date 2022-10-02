@@ -36,6 +36,9 @@ class PlayerSession {
     /** @var array<string, int> */
     private array $kitCoolDowns;
 
+    /** @var int */
+    private int $balance;
+
     /** @var array<PermissionAttachment> */
     private array $attatchments = [];
 
@@ -53,6 +56,7 @@ class PlayerSession {
         $this->groups = array_map(fn($iGroup) => $gm->getGroupFromName($iGroup), $groups);
         $this->permissions = $data["permissions"] ?? [];
         $this->kitCoolDowns = $data["kitCoolDowns"] ?? [];
+        $this->balance = $data["balance"] ?? 0;
 
         $this->reloadPermissions();
     }
@@ -71,9 +75,25 @@ class PlayerSession {
             "bestKillStreak" => $this->bestKillStreak,
             "groups" => array_map(fn($group) => $group->getName(), $this->groups),
             "permissions" => $this->permissions,
-            "kitCoolDowns" => $this->kitCoolDowns
+            "kitCoolDowns" => $this->kitCoolDowns,
+            "balance" => $this->balance
         ]);
         $store->save();
+    }
+
+    /*** @return int */
+    public function getBalance() : int {
+        return $this->balance;
+    }
+
+    /**
+     * Gives money to the player
+     *
+     * @param int $amount
+     * @return void
+     */
+    public function giveMoney(int $amount) : void {
+        $this->balance += $amount;
     }
 
     /**

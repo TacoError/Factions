@@ -10,7 +10,7 @@ use Taco\Factions\utils\Format;
 class FactionAcceptInviteCommand extends CoreSubCommand {
 
     public function __construct(private FactionManager $manager) {
-        parent::__construct("join", "Join a faction.");
+        parent::__construct("join", "Join a faction. [name]");
     }
 
     public function execute(Player|CommandSender $sender, array $args = []) : void {
