@@ -12,3 +12,5 @@ permissions:
     default: op
   core.permissions:
     default: op
+  core.kits:
+    default: op

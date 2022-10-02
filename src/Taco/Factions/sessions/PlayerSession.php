@@ -65,7 +65,13 @@ class PlayerSession {
         $this->unloadPermissions();
         $store = $this->store;
         $store->set($this->player->getName(), [
-
+            "kills" => $this->kills,
+            "deaths" => $this->deaths,
+            "killStreak" => $this->killStreak,
+            "bestKillStreak" => $this->bestKillStreak,
+            "groups" => array_map(fn($group) => $group->getName(), $this->groups),
+            "permissions" => $this->permissions,
+            "kitCoolDowns" => $this->kitCoolDowns
         ]);
         $store->save();
     }

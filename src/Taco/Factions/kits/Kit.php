@@ -3,7 +3,6 @@
 use pocketmine\item\Item;
 use pocketmine\player\Player;
 use Taco\Factions\Manager;
-use Taco\Factions\sessions\PlayerSession;
 use Taco\Factions\utils\Format;
 use Taco\Factions\utils\PlayerUtils;
 
@@ -32,10 +31,11 @@ class Kit {
      * Gives the kit to the player
      *
      * @param Player $player
+     * @param bool $setCD
      * @return void
      */
-    public function giveKit(Player $player) : void {
-        Manager::getSessionManager()->getSession($player)->setKitCoolDown($this->name);
+    public function giveKit(Player $player, bool $setCD = true) : void {
+        if ($setCD) Manager::getSessionManager()->getSession($player)->setKitCoolDown($this->name);
         foreach ($this->items as $item) {
             PlayerUtils::giveSafe($player, $item);
         }
@@ -50,6 +50,11 @@ class Kit {
     /*** @return string */
     public function getName() : string {
         return $this->name;
+    }
+
+    /*** @return array|Item[] */
+    public function getItems() : array {
+        return $this->items;
     }
 
     /**

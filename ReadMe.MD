@@ -25,8 +25,8 @@ will come from the group that has highest authority.
 # Kits
 
 Kits are simple, you create one by using the command
-/kit create, this command has three arguments,
-/kit create (name) (coolDown IN SECONDS) (permission). After running the command
+/createkit, this command has three arguments,
+/createkit (name) (coolDown IN SECONDS) (permission). After running the command
 you will be prompted with a double chest, any item you put in the chest
 will be given to whoever claims the kit, once you are done
 adding items, simply close the inventory. If no permission is provided 
@@ -35,10 +35,13 @@ When the player claims the kit, every item will have a check seeing
 if the inventory can hold the item, if they can it will be added to their
 inventory, otherwise it will be dropped on the ground at their position.
 
-When you edit a kit, it is very simple. The inventory you saw the first
+When you edit a kit, it is very simple (/editkit (name)). The inventory you saw the first
 time you made the kit will open, containing all the items you put inside the first time.
 Once you are finished editing the inventory, just close it and it will
 save.
+
+Deleting a kit is pretty self-explanitory, simple use /deletekit (name). This can be used whenever.
+Also, when creating a kit, if you don't want the kit to have a permission just leave that argument empty.
 
 # Storage
 

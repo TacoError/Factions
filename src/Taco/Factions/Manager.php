@@ -2,6 +2,7 @@
 
 use Taco\Factions\factions\FactionManager;
 use Taco\Factions\groups\GroupManager;
+use Taco\Factions\kits\KitManager;
 use Taco\Factions\sessions\SessionManager;
 
 class Manager {
@@ -15,9 +16,13 @@ class Manager {
     /** @var SessionManager */
     private static SessionManager $sessionManager;
 
+    /** @var KitManager */
+    private static KitManager $kitManager;
+
     public function __construct(array $config) {
         self::$groupManager = new GroupManager($config["groups"]);
         self::$sessionManager = new SessionManager();
+        self::$kitManager = new KitManager();
         self::$factionManager = new FactionManager();
         self::$factionManager->prepare();
     }
@@ -35,6 +40,11 @@ class Manager {
     /*** @return SessionManager */
     public static function getSessionManager() : SessionManager {
         return self::$sessionManager;
+    }
+
+    /*** @return KitManager -*/
+    public static function getKitManager() : KitManager {
+        return self::$kitManager;
     }
 
 }
