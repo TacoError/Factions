@@ -4,7 +4,6 @@ use JsonException;
 use pocketmine\player\Player;
 use pocketmine\Server;
 use pocketmine\utils\Config;
-use pocketmine\utils\TextFormat;
 use Taco\Factions\factions\commands\FactionCommand;
 use Taco\Factions\factions\objects\FactionBank;
 use Taco\Factions\factions\objects\FactionClaims;
@@ -71,7 +70,8 @@ class FactionManager {
                 $data["allies"],
                 $data["enemies"],
                 $data["power"],
-                new FactionBank($data["balance"])
+                new FactionBank($data["balance"]),
+                $this
             );
         }
     }
@@ -143,7 +143,8 @@ class FactionManager {
             [],
             [],
             50,
-            new FactionBank(0)
+            new FactionBank(0),
+            $this
         );
     }
 
@@ -174,6 +175,11 @@ class FactionManager {
         return null;
     }
 
+    /*** @return FactionRole */
+    public function getDefaultRole() : FactionRole {
+        return $this->factionRoles["Member"];
+    }
+
     /**
      * If there is a faction with the said tag, it will return
      * the faction, otherwise null
@@ -188,6 +194,34 @@ class FactionManager {
             return $faction;
         }
         return null;
+    }
+
+    /**
+     * Returns whether the player has a invite to a faction
+     *
+     * @param Player $player
+     * @param string $faction
+     * @return bool
+     */
+    public function hasInviteFromFaction(Player $player, string $faction) : bool {
+        return $this->factions[$faction]->hasInvite($player->getName());
+    }
+
+    /**
+     * Removes all current faction invites from a player
+     *
+     * @param Player $player
+     * @return void
+     */
+    public function removeInviteInstances(Player $player) : void {
+        foreach ($this->factions as $faction) {
+            $faction->unsetFromInvites($player->getName());
+        }
+    }
+
+    /*** @return array<string, Faction> */
+    public function getFactions() : array {
+        return $this->factions;
     }
 
 }

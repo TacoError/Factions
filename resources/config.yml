@@ -1,5 +1,7 @@
+cfg-ver: 0
 groups:
   Guest:
     authority: 1
     fancyName: "§l§7Guest"
     permissions: []
+faction-invite-length: 60

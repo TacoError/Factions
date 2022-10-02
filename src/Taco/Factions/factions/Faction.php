@@ -1,10 +1,12 @@
 <?php namespace Taco\Factions\factions;
 
+use pocketmine\player\Player;
 use pocketmine\Server;
 use Taco\Factions\factions\objects\FactionBank;
 use Taco\Factions\factions\objects\FactionClaims;
 use Taco\Factions\factions\objects\FactionInvite;
 use Taco\Factions\factions\objects\FactionMember;
+use Taco\Factions\utils\Format;
 
 class Faction {
 
@@ -38,6 +40,9 @@ class Faction {
     /** @var FactionBank */
     private FactionBank $bank;
 
+    /** @var FactionManager */
+    private FactionManager $manager;
+
     public function __construct(
         string $name,
         string $description,
@@ -48,7 +53,8 @@ class Faction {
         array $allies,
         array $enemies,
         int $power,
-        FactionBank $bank
+        FactionBank $bank,
+        FactionManager $manager
     ) {
         $this->name = $name;
         $this->description = $description;
@@ -60,6 +66,7 @@ class Faction {
         $this->enemies = $enemies;
         $this->power = $power;
         $this->bank = $bank;
+        $this->manager = $manager;
     }
 
     /*** @return string */
@@ -110,6 +117,58 @@ class Faction {
     /*** @return FactionBank */
     public function getBank() : FactionBank {
         return $this->bank;
+    }
+
+    /**
+     * Invite a player to your faction
+     *
+     * @param Player $from
+     * @param Player $player
+     * @return void
+     */
+    public function invite(Player $from, Player $player) : void {
+        $this->invites[] = new FactionInvite($from->getName(), $player->getName(), time());
+    }
+
+    /**
+     * Joins a player to the faction
+     *
+     * @param Player $player
+     * @return void
+     */
+    public function acceptInvite(Player $player) : void {
+        $this->members[] = new FactionMember(
+            $player->getName(),
+            $this->manager->getDefaultRole(),
+        );
+        $this->manager->removeInviteInstances($player);
+        $this->sendMessageToOnlineMembers(Format::PREFIX_FACTIONS . "e" . $player->getName() . " has joined the faction.");
+    }
+
+    /**
+     * @param string $name
+     * @return bool
+     */
+    public function hasInvite(string $name) : bool {
+        return in_array($name, array_map(fn($invite) => $invite->getWho(), $this->invites));
+    }
+
+    /**
+     * Removes a name from the invites
+     *
+     * @param string $name
+     * @return void
+     */
+    public function unsetFromInvites(string $name) : void {
+        $this->invites = array_filter($this->invites, fn($invite) => $invite->getWho() !== $name);
+    }
+
+    /**
+     * @param string $name
+     * @return FactionInvite
+     */
+    public function getInvite(string $name) : FactionInvite {
+        return array_filter($this->invites, fn($invite) => $invite->getWho() == $name)[0];
     }
 
     /**
