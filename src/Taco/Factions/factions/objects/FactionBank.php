@@ -1,6 +1,7 @@
 <?php namespace Taco\Factions\factions\objects;
 
 use pocketmine\player\Player;
+use Taco\Factions\Manager;
 
 class FactionBank {
 
@@ -24,7 +25,8 @@ class FactionBank {
      * @return void
      */
     public function takeBalancePlayer(Player $player, int $amount) : void {
-        //TODO
+        $this->balance -= $amount;
+        Manager::getSessionManager()->getSession($player)->giveMoney($amount);
     }
 
     /**
@@ -35,7 +37,8 @@ class FactionBank {
      * @return void
      */
     public function addBalance(Player $from, int $amount) : void {
-        //TODO
+        $this->balance += $amount;
+        Manager::getSessionManager()->getSession($from)->takeMoney($amount);
     }
 
 }

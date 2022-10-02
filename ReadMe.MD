@@ -9,6 +9,7 @@ Factions core made for CenturyMC by TacoError.
 | core.groups | Add or remove groups from<br/>players.    |
 |core.permissions| Edit a players individual<br/>permissions |
 |core.kits| Create, delete, and edit kits.            |
+|core.money|Give and take money from a player|
 
 # Groups
 

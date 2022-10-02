@@ -14,3 +14,5 @@ permissions:
     default: op
   core.kits:
     default: op
+  core.money:
+    default: op

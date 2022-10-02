@@ -3,6 +3,9 @@
 use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat;
 use Taco\Factions\commands\CoreCommand;
+use Taco\Factions\factions\commands\bank\FactionAddMoneyCommand;
+use Taco\Factions\factions\commands\bank\FactionBalanceCommand;
+use Taco\Factions\factions\commands\bank\FactionWithdrawCommand;
 use Taco\Factions\factions\commands\base\FactionCreateCommand;
 use Taco\Factions\factions\commands\base\FactionDisbandCommand;
 use Taco\Factions\factions\commands\base\FactionHelpCommand;
@@ -10,6 +13,7 @@ use Taco\Factions\factions\commands\invites\FactionAcceptInviteCommand;
 use Taco\Factions\factions\commands\invites\FactionInviteCommand;
 use Taco\Factions\factions\commands\invites\FactionInvitesCommand;
 use Taco\Factions\Manager;
+use Taco\Factions\utils\Format;
 
 class FactionCommand extends CoreCommand {
 
@@ -23,12 +27,15 @@ class FactionCommand extends CoreCommand {
             new FactionInviteCommand($manager),
             new FactionAcceptInviteCommand($manager),
             new FactionInvitesCommand($manager),
-            new FactionHelpCommand($this)
+            new FactionHelpCommand($this),
+            new FactionWithdrawCommand($manager),
+            new FactionAddMoneyCommand($manager),
+            new FactionBalanceCommand($manager)
         ]);
     }
 
     public function execute(CommandSender $sender, string $commandLabel, array $args) : void {
-        $validSubCommand = TextFormat::RED . "Please provide a valid subcommand. Use " . TextFormat::GREEN . "/f help" . TextFormat::RED . " to see a list of subcommands.";
+        $validSubCommand = Format::PREFIX_FACTIONS_BAD . "Invalid subcommand, use /f help for a list of subcommands.";
         if (count($args) < 1) {
             $sender->sendMessage($validSubCommand);
             return;

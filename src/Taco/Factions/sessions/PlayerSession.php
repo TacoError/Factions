@@ -87,6 +87,16 @@ class PlayerSession {
     }
 
     /**
+     * Takes money from the player
+     *
+     * @param int $amount
+     * @return void
+     */
+    public function takeMoney(int $amount) : void {
+        $this->balance -= $amount;
+    }
+
+    /**
      * Gives money to the player
      *
      * @param int $amount

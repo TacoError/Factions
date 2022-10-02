@@ -7,6 +7,10 @@ use pocketmine\utils\Config;
 use Taco\Factions\Main;
 use Taco\Factions\sessions\commands\AddPermissionCommand;
 use Taco\Factions\sessions\commands\RemovePermissionCommand;
+use Taco\Factions\sessions\economy\BalanceCommand;
+use Taco\Factions\sessions\economy\GiveMoneyCommand;
+use Taco\Factions\sessions\economy\PayCommand;
+use Taco\Factions\sessions\economy\TakeMoneyCommand;
 
 class SessionManager {
 
@@ -22,7 +26,11 @@ class SessionManager {
         $server->getPluginManager()->registerEvents(new SessionListener(), Main::getInstance());
         $server->getCommandMap()->registerAll("Factions", [
             new AddPermissionCommand(),
-            new RemovePermissionCommand()
+            new RemovePermissionCommand(),
+            new BalanceCommand(),
+            new GiveMoneyCommand(),
+            new TakeMoneyCommand(),
+            new PayCommand()
         ]);
     }
 
