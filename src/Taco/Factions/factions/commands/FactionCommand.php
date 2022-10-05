@@ -9,6 +9,8 @@ use Taco\Factions\factions\commands\bank\FactionWithdrawCommand;
 use Taco\Factions\factions\commands\base\FactionCreateCommand;
 use Taco\Factions\factions\commands\base\FactionDisbandCommand;
 use Taco\Factions\factions\commands\base\FactionHelpCommand;
+use Taco\Factions\factions\commands\claim\FactionClaimCommand;
+use Taco\Factions\factions\commands\claim\FactionDelClaimCommand;
 use Taco\Factions\factions\commands\invites\FactionAcceptInviteCommand;
 use Taco\Factions\factions\commands\invites\FactionInviteCommand;
 use Taco\Factions\factions\commands\invites\FactionInvitesCommand;
@@ -30,7 +32,9 @@ class FactionCommand extends CoreCommand {
             new FactionHelpCommand($this),
             new FactionWithdrawCommand($manager),
             new FactionAddMoneyCommand($manager),
-            new FactionBalanceCommand($manager)
+            new FactionBalanceCommand($manager),
+            new FactionClaimCommand($manager),
+            new FactionDelClaimCommand($manager)
         ]);
     }
 
