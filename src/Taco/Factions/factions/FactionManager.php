@@ -1,6 +1,7 @@
 <?php namespace Taco\Factions\factions;
 
 use JsonException;
+use pocketmine\item\Item;
 use pocketmine\player\Player;
 use pocketmine\Server;
 use pocketmine\utils\Config;
@@ -35,6 +36,17 @@ class FactionManager {
                     FactionPermissionTypes::PERMISSION_PLACE
                 ]
             ),
+            "Captain" => new FactionRole("Captain",
+                [
+                    FactionPermissionTypes::PERMISSION_REMOVE_CLAIM,
+                    FactionPermissionTypes::PERMISSION_ADD_CLAIM,
+                    FactionPermissionTypes::PERMISSION_BANK_TAKE,
+                    FactionPermissionTypes::PERMISSION_BANK_ADD,
+                    FactionPermissionTypes::PERMISSION_BUILD,
+                    FactionPermissionTypes::PERMISSION_PLACE,
+                    FactionPermissionTypes::PERMISSION_INVITE
+                ]
+            ),
             "Owner" => new FactionRole("Owner",
                 [
                     FactionPermissionTypes::PERMISSION_ALL
@@ -60,6 +72,11 @@ class FactionManager {
                 );
             }
 
+            $items = [];
+            foreach ($data["vault"] as $pos => $item) {
+                $items[$pos] = Item::jsonDeserialize($item);
+            }
+
             $this->factions[$name] = new Faction(
                 $name,
                 $data["description"],
@@ -71,7 +88,8 @@ class FactionManager {
                 $data["enemies"],
                 $data["power"],
                 new FactionBank($data["balance"]),
-                $this
+                $this,
+                $items
             );
         }
     }
@@ -97,6 +115,11 @@ class FactionManager {
                 ];
             }
 
+            $items = [];
+            foreach ($faction->getVaultItems() as $pos => $item) {
+                $items[$pos] = $item->jsonSerialize();
+            }
+
             $store->set($faction->getName(), [
                 "description" => $faction->getDescription(),
                 "tag" => $faction->getTag(),
@@ -106,7 +129,8 @@ class FactionManager {
                 "allies" => $faction->getAllies(),
                 "enemies" => $faction->getEnemies(),
                 "power" => $faction->getPower(),
-                "balance" => $faction->getBank()->getBalance()
+                "balance" => $faction->getBank()->getBalance(),
+                "vault" => $items
             ]);
         }
         $store->save();
@@ -144,7 +168,8 @@ class FactionManager {
             [],
             50,
             new FactionBank(0),
-            $this
+            $this,
+            []
         );
     }
 
@@ -158,6 +183,11 @@ class FactionManager {
     public function getFactionFromName(string $name) : ?Faction {
         if (isset($this->factions[$name])) return $this->factions[$name];
         return null;
+    }
+
+    /*** @return FactionRole */
+    public function getCaptainRole() : FactionRole {
+        return $this->factionRoles["Captain"];
     }
 
     /**
@@ -222,6 +252,11 @@ class FactionManager {
     /*** @return array<string, Faction> */
     public function getFactions() : array {
         return $this->factions;
+    }
+
+    /*** @return FactionRole */
+    public function getLeaderRole() : FactionRole {
+        return $this->factionRoles["Owner"];
     }
 
 }

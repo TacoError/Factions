@@ -1,5 +1,6 @@
 <?php namespace Taco\Factions\factions;
 
+use pocketmine\item\Item;
 use pocketmine\player\Player;
 use pocketmine\Server;
 use Taco\Factions\factions\objects\FactionBank;
@@ -43,6 +44,12 @@ class Faction {
     /** @var FactionManager */
     private FactionManager $manager;
 
+    /** @var array<int, Item> */
+    private array $vaultItems;
+
+    /** @var bool */
+    private bool $vaultOpened = false;
+
     public function __construct(
         string $name,
         string $description,
@@ -54,7 +61,8 @@ class Faction {
         array $enemies,
         int $power,
         FactionBank $bank,
-        FactionManager $manager
+        FactionManager $manager,
+        array $vaultItems
     ) {
         $this->name = $name;
         $this->description = $description;
@@ -67,6 +75,7 @@ class Faction {
         $this->power = $power;
         $this->bank = $bank;
         $this->manager = $manager;
+        $this->vaultItems = $vaultItems;
     }
 
     /*** @return string */
@@ -99,6 +108,19 @@ class Faction {
         return $this->claims;
     }
 
+    /**
+     * @param bool $state
+     * @return void
+     */
+    public function setVaultState(bool $state) : void {
+        $this->vaultOpened = $state;
+    }
+
+    /*** @return bool */
+    public function getVaultState() : bool {
+        return $this->vaultOpened;
+    }
+
     /*** @return array|string[] */
     public function getAllies() : array {
         return $this->allies;
@@ -107,6 +129,19 @@ class Faction {
     /*** @return array|string[] */
     public function getEnemies() : array {
         return $this->enemies;
+    }
+
+    /**
+     * @param array $items
+     * @return void
+     */
+    public function setVaultItems(array $items) : void {
+        $this->vaultItems = $items;
+    }
+
+    /*** @return array|Item[] */
+    public function getVaultItems() : array {
+        return $this->vaultItems;
     }
 
     /*** @return int */

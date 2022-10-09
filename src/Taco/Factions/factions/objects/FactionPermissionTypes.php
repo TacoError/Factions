@@ -10,5 +10,8 @@ class FactionPermissionTypes {
     public const PERMISSION_BANK_ADD = 4;
     public const PERMISSION_ADD_CLAIM = 5;
     public const PERMISSION_REMOVE_CLAIM = 6;
+    public const PERMISSION_PROMOTE = 7;
+    public const PERMISSION_DEMOTE = 8;
+    public const PERMISSION_VAULT = 9;
 
 }

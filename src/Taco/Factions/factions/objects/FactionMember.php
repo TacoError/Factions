@@ -16,6 +16,14 @@ class FactionMember {
         $this->role = $role;
     }
 
+    /**
+     * @param FactionRole $role
+     * @return void
+     */
+    public function setRole(FactionRole $role) : void {
+        $this->role = $role;
+    }
+
     /*** @return FactionRole */
     public function getRole() : FactionRole {
         return $this->role;
@@ -29,14 +37,6 @@ class FactionMember {
     /*** @return Player|null */
     public function getPlayer() : ?Player {
         return Server::getInstance()->getPlayerExact($this->name);
-    }
-
-    /**
-     * @param FactionRole $role
-     * @return void
-     */
-    public function setRole(FactionRole $role) : void {
-        $this->role = $role;
     }
 
 }
