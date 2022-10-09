@@ -3,6 +3,7 @@
 use pocketmine\item\Item;
 use pocketmine\player\Player;
 use pocketmine\Server;
+use pocketmine\world\Position;
 use Taco\Factions\factions\objects\FactionBank;
 use Taco\Factions\factions\objects\FactionClaims;
 use Taco\Factions\factions\objects\FactionInvite;
@@ -186,6 +187,14 @@ class Faction {
      */
     public function hasInvite(string $name) : bool {
         return in_array($name, array_map(fn($invite) => $invite->getWho(), $this->invites));
+    }
+
+    /**
+     * @param string $who
+     * @return bool
+     */
+    public function isAlliedTo(string $who) : bool {
+        return in_array($who, $this->allies);
     }
 
     /**

@@ -5,6 +5,7 @@ use pocketmine\item\Item;
 use pocketmine\player\Player;
 use pocketmine\Server;
 use pocketmine\utils\Config;
+use pocketmine\world\Position;
 use Taco\Factions\factions\commands\FactionCommand;
 use Taco\Factions\factions\objects\FactionBank;
 use Taco\Factions\factions\objects\FactionClaims;
@@ -257,6 +258,29 @@ class FactionManager {
     /*** @return FactionRole */
     public function getLeaderRole() : FactionRole {
         return $this->factionRoles["Owner"];
+    }
+
+    /**
+     * @param Position $pos
+     * @return string|null
+     */
+    public function getClaimAt(Position $pos) : ?string {
+        foreach($this->factions as $name => $faction) {
+            if ($faction->getClaimManager()->hasClaimAt($pos->asVector3(), $pos->getWorld())) return $name;
+        }
+        return null;
+    }
+
+    /**
+     * @param int $hash
+     * @param string $world
+     * @return Faction|null
+     */
+    public function getFactionFromChunkHash(int $hash, string $world) : ?Faction {
+        foreach ($this->factions as $faction) {
+            if ($faction->getClaimManager()->hasClaimAtChunkHash($hash, $world)) return $faction;
+        }
+        return null;
     }
 
 }

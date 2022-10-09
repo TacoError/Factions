@@ -25,7 +25,7 @@ class FactionClaimCommand extends CoreSubCommand {
             return;
         }
         if (!$faction->getClaimManager()->canClaimAt($sender->getPosition(), $sender->getWorld(), $faction->getName())) {
-            $sender->sendMessage(Format::PREFIX_FACTIONS_BAD . "You cannot claim here.");
+            $sender->sendMessage(Format::PREFIX_FACTIONS_BAD . "There is already a claim here.");
             return;
         }
         $faction->getClaimManager()->addClaim($sender->getPosition(), $sender->getWorld());

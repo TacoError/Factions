@@ -44,10 +44,19 @@ class FactionClaims {
      */
     public function hasClaimAt(Vector3 $pos, World $world) : bool {
         [$x, $z] = ChunkUtils::getRealXZ($pos);
-        if (isset($this->claimed[$world->getDisplayName()][World::chunkHash($x, $z)])) {
+        if (in_array(World::chunkHash($x, $z), $this->claimed[$world->getDisplayName()])) {
             return true;
         }
         return false;
+    }
+
+    /**
+     * @param int $hash
+     * @param string $world
+     * @return bool
+     */
+    public function hasClaimAtChunkHash(int $hash, string $world) : bool {
+        return in_array($hash, $this->claimed[$world]);
     }
 
     /**
@@ -61,11 +70,11 @@ class FactionClaims {
      */
     public function canClaimAt(Vector3 $pos, World $world, string $fName) : bool {
         foreach (Manager::getFactionManager()->getFactions() as $faction) {
-            if ($faction->getClaimManager()->hasClaimAt($pos, $world) && $faction->getName() !== $fName) {
+            if ($faction->getClaimManager()->hasClaimAt($pos, $world)) {
                 return false;
             }
         }
-        return false;
+        return true;
     }
 
     /*** @return array */
