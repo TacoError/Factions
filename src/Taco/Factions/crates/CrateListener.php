@@ -33,6 +33,7 @@ class CrateListener implements Listener {
         }
         $item = $player->getInventory()->getItemInHand();
         if ($crate->isKeyForCrate($item)) {
+            $player->getInventory()->setItemInHand($item->setCount($item->getCount() - 1));
             $player->sendMessage(Format::PREFIX_CRATE . "aYou have received a reward!");
             $crate->giveRandomRewardTo($player);
             return;
