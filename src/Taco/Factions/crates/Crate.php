@@ -1,16 +1,13 @@
 <?php namespace Taco\Factions\crates;
 
 use muqsit\invmenu\InvMenu;
-use muqsit\invmenu\transaction\InvMenuTransaction;
-use muqsit\invmenu\transaction\InvMenuTransactionResult;
 use muqsit\invmenu\type\InvMenuTypeIds;
+use pocketmine\inventory\Inventory;
 use pocketmine\item\Item;
-use pocketmine\item\ItemFactory;
 use pocketmine\item\VanillaItems;
 use pocketmine\player\Player;
-use pocketmine\world\Position;
+use Taco\Factions\utils\Format;
 use WolfDen133\WFT\Texts\FloatingText;
-use WolfDen133\WFT\WFT;
 
 class Crate {
 
@@ -20,32 +17,13 @@ class Crate {
     /** @var string */
     private string $fancyName;
 
-    /** @var array<string, array<string, int|string>> */
-    private array $rewards;
+    /** @var array<Item> */
+    private array $rewards = [];
 
-    /** @var FloatingText */
-    private FloatingText $text;
-
-    /** @var Position */
-    private Position $position;
-
-    public function __construct(string $name, string $fancyName, array $rewards, Position $pos) {
+    public function __construct(string $name, string $fancyName, array $rewards) {
         $this->name = $name;
         $this->fancyName = $fancyName;
         $this->rewards = $rewards;
-        $this->position = $pos;
-
-        $text = new FloatingText(new Position(
-            $pos->getX() + 0.5,
-            $pos->getY() + 1.5,
-            $pos->getZ() + 0.5,
-            $pos->getWorld()
-        ),
-            $this->name,
-            $this->fancyName . "\n§r§7Tap me with a key to open..."
-        );
-        WFT::getAPI()->registerText($text);
-        WFT::getAPI()::spawnToAll($text);
     }
 
     /*** @return string */
@@ -53,76 +31,86 @@ class Crate {
         return $this->name;
     }
 
+    /*** @return string */
+    public function getFancyName() : string {
+        return $this->fancyName;
+    }
+
+    /*** @return array */
+    public function getJSONRewards() : array {
+        return array_map(fn($item) => $item->jsonSerialize(), $this->rewards);
+    }
+
     /**
-     * Opens the drops menu
+     * Gives random reward from this crate to the player
      *
      * @param Player $player
      * @return void
      */
-    public function openDropsMenu(Player $player) : void {
-        $menu = InvMenu::create(InvMenuTypeIds::TYPE_CHEST);
-        $menu->send($player, $this->fancyName . "§r Crate");
-        $menu->setListener(function(InvMenuTransaction $transaction) : InvMenuTransactionResult {
-            return $transaction->discard();
-        });
-        $inv = $menu->getInventory();
-        $curr = 0;
-        foreach ($this->rewards as $data) {
-            $exploded = explode(":", $data["item"]);
-            $item = ItemFactory::getInstance()->get(
-                (int)$exploded[0],
-                (int)$exploded[1]
-            );
-            $inv->setItem($curr, $item->setCustomName($data["custom-name"] ?? $item->getName()));
-            $curr++;
+    public function giveRandomRewardTo(Player $player) : void {
+        $reward = $this->rewards[array_rand($this->rewards)];
+        if (!$player->getInventory()->canAddItem($reward)) {
+            $player->getWorld()->dropItem($player->getPosition()->asVector3(), $reward);
+            $player->sendMessage(Format::PREFIX_CRATE . "cYour inventory could not hold that item, so it has been dropped on the floor.");
+            return;
         }
+        $player->getInventory()->addItem($reward);
     }
 
-    /**
-     * Returns a random command to be executed.
-     *
-     * @return string
-     */
-    public function getRandomReward() : string {
-        foreach ($this->rewards as $reward) {
-            if (mt_rand(1, 2) < 2) {
-                return $reward["reward"];
-            }
-        }
-        return $this->rewards[0]["reward"];
-    }
-
-    /**
-     * Return a key for the crate
-     *
-     * @return Item
-     */
-    public function getKey() : Item {
+    /*** @return Item */
+    public function makeKey() : Item {
         $key = VanillaItems::NETHER_STAR();
-        $key->setCustomName($this->fancyName . "§r§f Crate key");
+        $key->setCustomName($this->fancyName . "§r§f Key");
         $key->setLore([
-            "§r§7Click this key on a crate",
-            "§r§7to get a random reward."
+            "§r§7Tap the \"" . $this->fancyName . "\" §r§7crate with",
+            "§r§7this key to open the crate!"
         ]);
-        $key->getNamedTag()->setString("crateKey", $this->name);
+        $key->getNamedTag()->setString("crateType", $this->name);
         return $key;
     }
 
     /**
-     * Returns a random key
+     * Returns whether the specified item is for
+     * this crate.
      *
      * @param Item $item
      * @return bool
      */
-    public function isValidKey(Item $item) : bool {
-        if (is_null($type = $item->getNamedTag()->getTag("crateKey"))) return false;
-        if ($type->getValue() == $this->name) return true;
-        return false;
+    public function isKeyForCrate(Item $item) : bool {
+        if (is_null($type = $item->getNamedTag()->getTag("crateType"))) {
+            return false;
+        }
+        return $type->getValue() == $this->name;
     }
 
-    /*** @return Position */
-    public function getPosition() : Position {
-        return $this->position;
+    /**
+     * Opens the menu showing the possible rewards.
+     *
+     * @param Player $player
+     * @return void
+     */
+    public function openRewardsMenu(Player $player) : void {
+        $menu = InvMenu::create(count($this->rewards) > 26 ? InvMenuTypeIds::TYPE_DOUBLE_CHEST : InvMenuTypeIds::TYPE_CHEST);
+        $menu->setListener(InvMenu::readonly());
+        $menu->send($player, "Possible rewards for \"" . $this->name . "\"");
+        $menu->getInventory()->setContents($this->rewards);
+    }
+
+    /**
+     * Opens the chest the player will edit the rewards in.
+     *
+     * @param Player $player
+     * @return void
+     */
+    public function openEditRewardsChest(Player $player) : void {
+        $menu = InvMenu::create(InvMenuTypeIds::TYPE_DOUBLE_CHEST);
+        $menu->send($player, "Edit Rewards for \"" . $this->name . "\"");
+        $inventory = $menu->getInventory();
+        $inventory->setContents($this->rewards);
+        $menu->setInventoryCloseListener(function(Player $player, Inventory $inventory) : void {
+            $this->rewards = $inventory->getContents();
+            $player->sendMessage(Format::PREFIX_CRATE . "eChanged items for \"" . $this->name . "\"");
+        });
     }
 
 }

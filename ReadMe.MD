@@ -58,17 +58,25 @@ doing said thing.
 
 # Crates
 
-Crates a simple, there are commands such as /givekey, and /keyall.
-Crates are to be configured in the config.yml file and rewards
-will be configured with a chance to get the reward. Rewards will be given via
-commands only. The "name" is the name that will be types to keyall
-and give keys to the players. the "fancyName" is the name that
-will be above the crate in game, and on the keys.
+Making crates is simple. Just run /makecrate (name) (fancyName) and
+that's all!
 
-The animation for crates should be kept simple so that players can
-open their crates quickly, and it looks smooth. There will be SOME particles
-and the crate will open for 2 seconds. Keys will be able to get opened
-immediately.
+Editing a crate's items. Simple do /editcrate (name) and a window
+will pop up, just throw in, or remove items to be in the rewards.
+
+Setting a crates position is easy, simple do /setcratepos (name) and then
+click any block you want to be a crate! (this also means you can have
+crates in multiple worlds!)
+
+Deleting a crates position is also simple. Just do the step above on a
+block that's already crated, it will just remove it!
+
+Giving keys to a player (singular). /givekey (player) (crate) [amount = 1].
+Its that simple!
+
+Giving keys to everyone online! /keyall (name) [amount = 1]
+
+Thats all for crates!
 
 # Configuration
 

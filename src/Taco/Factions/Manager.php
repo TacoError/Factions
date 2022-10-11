@@ -1,6 +1,6 @@
 <?php namespace Taco\Factions;
 
-use Taco\Factions\crates\CrateManager;
+use Taco\Factions\crates\CratesManager;
 use Taco\Factions\factions\FactionManager;
 use Taco\Factions\groups\GroupManager;
 use Taco\Factions\kits\KitManager;
@@ -20,8 +20,8 @@ class Manager {
     /** @var KitManager */
     private static KitManager $kitManager;
 
-    /** @var CrateManager */
-    private static CrateManager $crateManager;
+    /** @var CratesManager */
+    private static CratesManager $crateManager;
 
     public function __construct(array $config) {
         self::$groupManager = new GroupManager($config["groups"]);
@@ -29,7 +29,7 @@ class Manager {
         self::$kitManager = new KitManager();
         self::$factionManager = new FactionManager();
         self::$factionManager->prepare();
-        self::$crateManager = new CrateManager();
+        self::$crateManager = new CratesManager();
     }
 
     /*** @return FactionManager */
@@ -52,8 +52,8 @@ class Manager {
         return self::$kitManager;
     }
 
-    /*** @return CrateManager */
-    public static function getCrateManager() : CrateManager {
+    /*** @return CratesManager */
+    public static function getCrateManager() : CratesManager {
         return self::$crateManager;
     }
 

@@ -42,6 +42,7 @@ class Main extends PluginBase {
     public function onDisable() : void {
         if (!$this->save) return;
         Manager::getFactionManager()->save();
+        Manager::getCrateManager()->save();
     }
 
 }

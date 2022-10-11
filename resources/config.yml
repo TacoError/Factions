@@ -5,16 +5,3 @@ groups:
     fancyName: "§7Guest"
     permissions: []
 faction-invite-length: 60
-crates:
-  Example:
-    pos: "100:100:100:world"
-    fancyName: "§l§eExample Crate!"
-    rewards:
-      0:
-        reward: "give {name} diamond_block"
-        item: "1:2"
-        custom-name: "diam blok"
-      1:
-        reward: "give {name} diamond_block 2"
-        item: "1:1"
-        custom-name: "diam blok (2) :>"

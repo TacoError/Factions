@@ -6,30 +6,30 @@ use pocketmine\Server;
 use Taco\Factions\Manager;
 use Taco\Factions\utils\Format;
 
-class GiveCrateKeyCommand extends Command {
+class GiveKeyCommand extends Command {
 
     public function __construct() {
-        parent::__construct("givekey", "Give a key to a player");
+        parent::__construct("givekey", "Give a key to a player.");
         $this->setPermission("core.crates");
     }
 
     public function execute(CommandSender $sender, string $commandLabel, array $args) : void {
         if (!$this->testPermission($sender)) return;
         if (count($args) < 2) {
-            $sender->sendMessage("Correct usage: /givekey (player) (key) (amount = 1)");
+            $sender->sendMessage(Format::PREFIX_CRATE . "cUsage: /givekey (player) (crate) (amount = 1)");
             return;
         }
         if (is_null($player = Server::getInstance()->getPlayerByPrefix($args[0]))) {
-            $sender->sendMessage("That player is not online or doesn't exist.");
+            $sender->sendMessage(Format::PREFIX_CRATE . "cInvalid player.");
             return;
         }
         if (is_null($crate = Manager::getCrateManager()->getCrateFromName($args[1]))) {
-            $sender->sendMessage("Please provide a valid crate.");
+            $sender->sendMessage(Format::PREFIX_CRATE . "cInvalid crate.");
             return;
         }
-        $sender->sendMessage("Gave key to player");
-        $player->sendMessage(Format::PREFIX_CRATE . "eYou have received a key.");
-        $player->getInventory()->addItem($crate->getKey()->setCount($args[2] ?? 1));
+        $player->getInventory()->addItem($crate->makeKey()->setCount($args[2] ?? 1));
+        $sender->sendMessage(Format::PREFIX_CRATE . "aGave key to player.");
+        $player->sendMessage(Format::PREFIX_CRATE . "aYou have received a " . $crate->getFancyName() . "§r§a key!");
     }
 
 }

@@ -331,6 +331,7 @@ class Faction {
         $player->sendMessage(" §fAllies§7: §7[§e" . implode(",", $this->allies) . "§7]");
         $player->sendMessage(" §fClaimed Chunks§7: §e" . $this->getClaimCount());
         $player->sendMessage(" §fPower: §e" . $this->getPower());
+        $player->sendMessage(" §fDescription: §e" . $this->getDescription());
     }
 
 }
