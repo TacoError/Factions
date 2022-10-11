@@ -62,7 +62,7 @@ class Crate {
         $key = VanillaItems::NETHER_STAR();
         $key->setCustomName($this->fancyName . "§r§f Key");
         $key->setLore([
-            "§r§7Tap the \"" . $this->fancyName . "\" §r§7crate with",
+            "§r§7Tap the \"" . $this->fancyName . "§r§7\" crate with",
             "§r§7this key to open the crate!"
         ]);
         $key->getNamedTag()->setString("crateType", $this->name);
