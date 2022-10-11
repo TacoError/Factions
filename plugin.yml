@@ -6,6 +6,10 @@ website: "https://github.com/TacoError"
 api: "4.0.0"
 version: 1.0.0
 main: Taco\Factions\Main
+load: POSTWORLD
+
+depend:
+  - WFT
 
 permissions:
   core.groups:
@@ -15,4 +19,6 @@ permissions:
   core.kits:
     default: op
   core.money:
+    default: op
+  core.crates:
     default: op

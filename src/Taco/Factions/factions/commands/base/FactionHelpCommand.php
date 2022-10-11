@@ -25,7 +25,7 @@ class FactionHelpCommand extends CoreSubCommand {
             else $display = $commands;
         }  else $display = array_slice($commands, count($commands) - (count($commands) % 10), count($commands) - 1);
 
-        $message = ["§7[§cFactions Help§r§7] §7(Page 1 / " . (max((int)(count($commands) / 10), 1)) . ")"];
+        $message = ["§7[§cFactions Help§r§7] §7(Page $page / ". count(array_chunk($commands, 10)) . ")"];
         $count = 0;
         foreach ($display as $command) {
             $count++;

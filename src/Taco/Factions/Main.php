@@ -25,14 +25,11 @@ class Main extends PluginBase {
         }
 
         $cfgVer = 0;
-
         $this->saveDefaultConfig();
         self::$config = $this->getConfig()->getAll();
         if (!isset(self::$config["cfg-ver"]) || self::$config["cfg-ver"] !== $cfgVer) {
             $this->save = false;
-            for ($i = 0; $i < 20; $i++) {
-                $this->getLogger()->error("CONFIG OUTDATED. (your version: " . self::$config["cfg-ver"] . " new version: " . $cfgVer . ")");
-            }
+            $this->getLogger()->error("CONFIG OUTDATED. (your version: " . self::$config["cfg-ver"] . " new version: " . $cfgVer . ")");
             $this->getLogger()->notice("Check here on how to fix: https://github.com/TacoError/Factions#Configuration");
             $this->getServer()->shutdown();
             return;

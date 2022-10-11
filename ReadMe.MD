@@ -4,12 +4,13 @@ Factions core made for CenturyMC by TacoError.
 
 # Permissions
 
-| Permission  | Usage                                     |
-|-------------|-------------------------------------------|
-| core.groups | Add or remove groups from<br/>players.    |
-|core.permissions| Edit a players individual<br/>permissions |
-|core.kits| Create, delete, and edit kits.            |
-|core.money|Give and take money from a player|
+| Permission  | Usage                                 |
+|-------------|---------------------------------------|
+| core.groups | Add or remove groups from players.    |
+|core.permissions| Edit a players individual permissions |
+|core.kits| Create, delete, and edit kits.        |
+|core.money| Give and take money from a player     |
+|core.crates|Permission to give crate keys|
 
 # Groups
 
@@ -55,6 +56,20 @@ a need to use MySQL or SQLite as Minecraft Bedrock Edition servers
 do not scale anywhere near enough for it to be worth the time spent
 doing said thing.
 
+# Crates
+
+Crates a simple, there are commands such as /givekey, and /keyall.
+Crates are to be configured in the config.yml file and rewards
+will be configured with a chance to get the reward. Rewards will be given via
+commands only. The "name" is the name that will be types to keyall
+and give keys to the players. the "fancyName" is the name that
+will be above the crate in game, and on the keys.
+
+The animation for crates should be kept simple so that players can
+open their crates quickly, and it looks smooth. There will be SOME particles
+and the crate will open for 2 seconds. Keys will be able to get opened
+immediately.
+
 # Configuration
 
 In the event the server shuts down saying "UPDATE CONFIG" do not panic. Simply goto the
@@ -66,4 +81,5 @@ older config version.
 
 - InvMenu ([Link](https://github.com/Muqsit/InvMenu))
 - FormAPI ([Link](https://github.com/jojoe77777/FormAPI))
+- WFT ([Link](https://github.com/WolfDen133/WFT))
 

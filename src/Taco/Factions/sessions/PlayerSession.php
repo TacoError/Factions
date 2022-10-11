@@ -42,6 +42,9 @@ class PlayerSession {
     /** @var array<PermissionAttachment> */
     private array $attatchments = [];
 
+    /** @var int */
+    private int $chatType = 0;
+
     public function __construct(Player $player, Config $store) {
         $this->player = $player;
         $this->store = $store;
@@ -79,6 +82,19 @@ class PlayerSession {
             "balance" => $this->balance
         ]);
         $store->save();
+    }
+
+    /**
+     * @param int $type
+     * @return void
+     */
+    public function setChatType(int $type) : void {
+        $this->chatType = $type;
+    }
+
+    /*** @return int */
+    public function getChatType() : int {
+        return $this->chatType;
     }
 
     /*** @return int */

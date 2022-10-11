@@ -6,9 +6,11 @@ use Taco\Factions\commands\CoreCommand;
 use Taco\Factions\factions\commands\bank\FactionAddMoneyCommand;
 use Taco\Factions\factions\commands\bank\FactionBalanceCommand;
 use Taco\Factions\factions\commands\bank\FactionWithdrawCommand;
+use Taco\Factions\factions\commands\base\FactionChatCommand;
 use Taco\Factions\factions\commands\base\FactionCreateCommand;
 use Taco\Factions\factions\commands\base\FactionDisbandCommand;
 use Taco\Factions\factions\commands\base\FactionHelpCommand;
+use Taco\Factions\factions\commands\base\FactionInfoCommand;
 use Taco\Factions\factions\commands\base\FactionMapCommand;
 use Taco\Factions\factions\commands\base\FactionOpenVaultCommand;
 use Taco\Factions\factions\commands\claim\FactionClaimCommand;
@@ -44,7 +46,9 @@ class FactionCommand extends CoreCommand {
             new FactionDemoteCommand($manager),
             new FactionLeaderCommand($manager),
             new FactionOpenVaultCommand($manager),
-            new FactionMapCommand($manager)
+            new FactionMapCommand($manager),
+            new FactionChatCommand($manager),
+            new FactionInfoCommand($manager)
         ]);
     }
 

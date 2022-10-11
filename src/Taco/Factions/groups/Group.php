@@ -18,6 +18,7 @@ class Group {
         $this->name = $name;
         $this->permissions = $permissions;
         $this->authority = $authority;
+        $this->fancyName = $fancyName;
     }
 
     /*** @return string */
@@ -33,6 +34,11 @@ class Group {
     /*** @return int */
     public function getAuthority() : int {
         return $this->authority;
+    }
+
+    /*** @return string */
+    public function getFancyName() : string {
+        return $this->fancyName;
     }
 
 }

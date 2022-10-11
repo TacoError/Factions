@@ -3,7 +3,6 @@
 use pocketmine\item\Item;
 use pocketmine\player\Player;
 use pocketmine\Server;
-use pocketmine\world\Position;
 use Taco\Factions\factions\objects\FactionBank;
 use Taco\Factions\factions\objects\FactionClaims;
 use Taco\Factions\factions\objects\FactionInvite;
@@ -77,6 +76,19 @@ class Faction {
         $this->bank = $bank;
         $this->manager = $manager;
         $this->vaultItems = $vaultItems;
+    }
+
+    /**
+     * @param string $message
+     * @return void
+     */
+    public function sendMessageAllies(string $message) : void {
+        $this->sendMessageToOnlineMembers($message);
+        foreach ($this->allies as $ally) {
+            $faction = $this->manager->getFactionFromName($ally);
+            if (is_null($faction)) continue;
+            $faction->sendMessageToOnlineMembers($message);
+        }
     }
 
     /*** @return string */
@@ -241,6 +253,84 @@ class Faction {
             return $member;
         }
         return null;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOwnersName() : string {
+        foreach($this->members as $member) {
+            if ($member->getRole()->hasPermission(-1)) {
+                return $member->getName();
+            }
+        }
+        return "";
+    }
+
+
+    /*** @return array<FactionMember> */
+    public function getCaptains() : array {
+        $list = [];
+        foreach($this->members as $member) {
+            if ($member->getRole()->getName() == "Captain") $list[] = $member;
+        }
+        return $list;
+    }
+
+    /*** @return array */
+    public function getCaptainNames() : array {
+        $list = [];
+        foreach ($this->getCaptains() as $cap) {
+            $list[] = $cap->getName();
+        }
+        return $list;
+    }
+
+    /*** @return array */
+    public function getMembersRoleMember() : array {
+        $list = [];
+        foreach($this->members as $member) {
+            if ($member->getRole()->getName() == "Member") $list[] = $member;
+        }
+        return $list;
+    }
+
+    /*** @return array */
+    public function getMemberNames() : array {
+        $list = [];
+        foreach ($this->getMembersRoleMember() as $cap) {
+            $list[] = $cap->getName();
+        }
+        return $list;
+    }
+
+    /**
+     * Returns amount of claims
+     *
+     * @return int
+     */
+    public function getClaimCount() : int {
+        $amt = 0;
+        foreach ($this->getClaimManager()->getClaims() as $claims) {
+            $amt += count($claims);
+        }
+        return $amt;
+    }
+
+    /**
+     * @param Player $player
+     * @return void
+     */
+    public function sendInfo(Player $player) : void {
+        $player->sendMessage("§r§e" . $this->getName() . "'s Info >");
+        $player->sendMessage(" §fLeader§7: §e" . $this->getOwnersName());
+        $player->sendMessage(" §fCaptains§7: §7[§e" . implode(",", $this->getCaptainNames()) . "§7]");
+        $player->sendMessage(" §fMembers:§7: §7[§e" . implode(",", $this->getMemberNames()) . "§7]");
+        $player->sendMessage(" §fOverall Members§7: §e" . count($this->members));
+        $player->sendMessage(" §fBalance§7: §e$" . Format::intToPrefix($this->bank->getBalance()));
+        $player->sendMessage(" §fAllies§7: §7[§e" . implode(",", $this->allies) . "§7]");
+        $player->sendMessage(" §fClaimed Chunks§7: §e" . $this->getClaimCount());
+        $player->sendMessage(" §fPower: §e" . $this->getPower());
     }
 
 }
