@@ -5,6 +5,8 @@ use pocketmine\player\Player;
 
 class PlayerUtils {
 
+    public const PHP_MAX = 2147483647;
+
     /**
      * If the player can hold the item, it will add it
      * to their inventory, otherwise drop it at their position

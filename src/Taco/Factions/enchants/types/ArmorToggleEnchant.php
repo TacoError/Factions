@@ -7,6 +7,6 @@ abstract class ArmorToggleEnchant extends CoreEnchant {
 
     abstract function onEquip(Player $player, int $level) : void;
 
-    abstract function onUnEquip(Player $player, int $level) : void;
+    abstract function onUnEquip(Player $player) : void;
 
 }

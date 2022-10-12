@@ -57,6 +57,7 @@ class FactionClaims {
      * @return bool
      */
     public function hasClaimAtChunkHash(int $hash, string $world) : bool {
+        if (!isset($this->claimed[$world])) return false;
         return in_array($hash, $this->claimed[$world]);
     }
 

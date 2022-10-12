@@ -12,14 +12,14 @@ use pocketmine\item\Tool;
 use pocketmine\item\VanillaItems;
 use pocketmine\Server;
 use Taco\Factions\enchants\commands\GiveEnchantmentBookCommand;
+use Taco\Factions\enchants\enchants\armor\boots\SpringsEnchant;
 use Taco\Factions\enchants\enchants\sword\SlowEnchant;
 use Taco\Factions\enchants\types\CoreEnchant;
 use Taco\Factions\Main;
 
 class EnchantManager {
 
-    /** @var array<int, CoreEnchant>
-     */
+    /** @var array<int, CoreEnchant> */
     private array $enchantments;
 
     private const DEFAULT_ENCHANTMENT_LIMITS = [
@@ -62,7 +62,8 @@ class EnchantManager {
     public function __construct() {
         EnchantmentIdMap::getInstance()->register(-1, new Enchantment("", 0, 0, 0, 0));
         $this->enchantments = [
-            50 => new SlowEnchant("Slow", Rarity::COMMON, ItemFlags::SWORD, 0x0, 5)
+            50 => new SlowEnchant("Slow", Rarity::COMMON, ItemFlags::SWORD, 0x0, 5),
+            51 => new SpringsEnchant("Springs", Rarity::COMMON, ItemFlags::FEET, 0x0, 2)
         ];
         foreach ($this->enchantments as $id => $enchant) {
             EnchantmentIdMap::getInstance()->register($id, $enchant);
@@ -73,6 +74,39 @@ class EnchantManager {
         $server->getCommandMap()->registerAll("Factions", [
             new GiveEnchantmentBookCommand()
         ]);
+    }
+
+    /**
+     * @param CoreEnchant $enchant
+     * @param Item $item
+     * @return bool
+     */
+    public function canBeAppliedTo(CoreEnchant $enchant, Item $item) : bool {
+        if ($enchant->getPrimaryItemFlags() === ItemFlags::FEET) {
+            if (in_array($item->getId(), self::IDS["boots"])) return true;
+            return false;
+        }
+        if ($enchant->getPrimaryItemFlags() === ItemFlags::LEGS) {
+            if (in_array($item->getId(), self::IDS["leggings"])) return true;
+            return false;
+        }
+        if ($enchant->getPrimaryItemFlags() === ItemFlags::TORSO) {
+            if (in_array($item->getId(), self::IDS["chestPlate"])) return true;
+            return false;
+        }
+        if ($enchant->getPrimaryItemFlags() === ItemFlags::HEAD) {
+            if (in_array($item->getId(), self::IDS["helmet"])) return true;
+            return false;
+        }
+        if ($enchant->getPrimaryItemFlags() === ItemFlags::SWORD) {
+            if ($item instanceof Sword) return true;
+            return false;
+        }
+        if ($enchant->getPrimaryItemFlags() === ItemFlags::TOOL) {
+            if ($item instanceof Tool) return true;
+            return false;
+        }
+        return false;
     }
 
     /**
@@ -157,7 +191,7 @@ class EnchantManager {
         $book = VanillaItems::BOOK();
         $book->setCustomName("§r§f" . $enchantment->getName() . " §eBook");
         $book->setLore([
-            "§r§7Combine with any " . $enchantment->getFor(),
+            "§r§7Combine with any §e" . $enchantment->getFor(),
             "§r§7to apply the enchant!",
             "",
             "§r§7Enchantment: §f" . $enchantment->getName(),
