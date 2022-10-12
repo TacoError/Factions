@@ -1,6 +1,7 @@
 <?php namespace Taco\Factions;
 
 use Taco\Factions\crates\CratesManager;
+use Taco\Factions\enchants\EnchantManager;
 use Taco\Factions\factions\FactionManager;
 use Taco\Factions\groups\GroupManager;
 use Taco\Factions\kits\KitManager;
@@ -23,6 +24,9 @@ class Manager {
     /** @var CratesManager */
     private static CratesManager $crateManager;
 
+    /** @var EnchantManager */
+    private static EnchantManager $enchantManager;
+
     public function __construct(array $config) {
         self::$groupManager = new GroupManager($config["groups"]);
         self::$sessionManager = new SessionManager();
@@ -30,6 +34,7 @@ class Manager {
         self::$factionManager = new FactionManager();
         self::$factionManager->prepare();
         self::$crateManager = new CratesManager();
+        self::$enchantManager = new EnchantManager();
     }
 
     /*** @return FactionManager */
@@ -47,7 +52,7 @@ class Manager {
         return self::$sessionManager;
     }
 
-    /*** @return KitManager -*/
+    /*** @return KitManager */
     public static function getKitManager() : KitManager {
         return self::$kitManager;
     }
@@ -55,6 +60,11 @@ class Manager {
     /*** @return CratesManager */
     public static function getCrateManager() : CratesManager {
         return self::$crateManager;
+    }
+
+    /*** @return EnchantManager */
+    public static function getEnchantManager() : EnchantManager {
+        return self::$enchantManager;
     }
 
 }

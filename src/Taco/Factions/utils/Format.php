@@ -8,6 +8,7 @@ class Format {
     public const PREFIX_KITS = "§r§7[§cKits§7] §";
     public const PREFIX_ECO = "§r§7[§cEco§7] §";
     public const PREFIX_CRATE = "§r§7[§cCrates§7] §";
+    public const PREFIX_ENCHANT = "§r§7[§cEnchanting§7] §";
 
     public static function intToPrefix($input) : string {
         if (!is_numeric($input)) return "0";

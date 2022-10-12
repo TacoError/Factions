@@ -325,7 +325,7 @@ class Faction {
         $player->sendMessage("§r§e" . $this->getName() . "'s Info >");
         $player->sendMessage(" §fLeader§7: §e" . $this->getOwnersName());
         $player->sendMessage(" §fCaptains§7: §7[§e" . implode(",", $this->getCaptainNames()) . "§7]");
-        $player->sendMessage(" §fMembers:§7: §7[§e" . implode(",", $this->getMemberNames()) . "§7]");
+        $player->sendMessage(" §fMembers§7: §7[§e" . implode(",", $this->getMemberNames()) . "§7]");
         $player->sendMessage(" §fOverall Members§7: §e" . count($this->members));
         $player->sendMessage(" §fBalance§7: §e$" . Format::intToPrefix($this->bank->getBalance()));
         $player->sendMessage(" §fAllies§7: §7[§e" . implode(",", $this->allies) . "§7]");

@@ -11,6 +11,7 @@ Factions core made for CenturyMC by TacoError.
 |core.kits| Create, delete, and edit kits.        |
 |core.money| Give and take money from a player     |
 |core.crates|Permission to give crate keys|
+|core.enchantments|Permission to give enchantment book and such|
 
 # Groups
 
@@ -76,7 +77,18 @@ Its that simple!
 
 Giving keys to everyone online! /keyall (name) [amount = 1]
 
-Thats all for crates!
+That's all for crates!
+
+# Custom Enchantments
+
+Custom enchantments are simple. There are books which can be applied
+to items, all items have a max amount of enchantment slots they can use
+before they have to get orbs to apply to the items so that they can
+add more enchantments. Thats about all.
+
+Every item has their own specified amount of max enchantments they can
+add before they need to use orbs. All items max out at 11 custom enchants
+to prevent too op CE PvP.
 
 # Configuration
 

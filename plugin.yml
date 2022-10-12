@@ -22,3 +22,5 @@ permissions:
     default: op
   core.crates:
     default: op
+  core.enchantments:
+    default: op

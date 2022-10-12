@@ -2,7 +2,9 @@
 
 use muqsit\invmenu\InvMenu;
 use muqsit\invmenu\type\InvMenuTypeIds;
+use pocketmine\data\bedrock\EnchantmentIdMap;
 use pocketmine\inventory\Inventory;
+use pocketmine\item\enchantment\EnchantmentInstance;
 use pocketmine\item\Item;
 use pocketmine\item\VanillaItems;
 use pocketmine\player\Player;
@@ -66,6 +68,7 @@ class Crate {
             "§r§7this key to open the crate!"
         ]);
         $key->getNamedTag()->setString("crateType", $this->name);
+        $key->addEnchantment(new EnchantmentInstance(EnchantmentIdMap::getInstance()->fromId(-1)));
         return $key;
     }
 
