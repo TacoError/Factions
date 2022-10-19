@@ -1,4 +1,4 @@
-<?php namespace Taco\Factions\enchants\enchants\armor\boots;
+<?php namespace Taco\Factions\enchants\enchants\armor;
 
 use pocketmine\entity\effect\EffectInstance;
 use pocketmine\entity\effect\VanillaEffects;

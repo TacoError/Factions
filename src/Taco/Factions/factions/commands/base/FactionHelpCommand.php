@@ -14,11 +14,12 @@ class FactionHelpCommand extends CoreSubCommand {
 
     public function execute(Player|CommandSender $sender, array $args = []) : void {
         $commands = $this->parent->getSubCommands();
-        $page = abs(count($args) > 0 ? $args[0] : 1);
+        $page = $args[0];
         if (!is_numeric($page)) {
             $sender->sendMessage(Format::PREFIX_FACTIONS_BAD . "The page must be a number.");
             return;
         }
+        $page = abs(count($args) > 0 ? $args[0] : 1);
 
         if (($page * 10) < count($commands)) {
             if ($page !== 1) $display = array_slice($commands, $page * 10);

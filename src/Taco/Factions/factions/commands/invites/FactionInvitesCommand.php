@@ -15,10 +15,12 @@ class FactionInvitesCommand extends CoreSubCommand {
 
     public function execute(Player|CommandSender $sender, array $args = []) : void {
         if (!$sender instanceof Player) return;
-        $invites = array_map(fn($faction) => $faction->getName(), array_filter(
-            array_values($this->manager->getFactions()),
-            fn($faction) => $faction->hasInvite($sender->getName() && $faction->getInvite($sender->getName())->getTimeSinceSent() < Main::$config["faction-invite-length"]))
-        );
+        $invites = [];
+        foreach($this->manager->getFactions() as $faction) {
+            if (!$faction->hasInvite($sender->getName())) continue;
+            if (!$faction->getInvite($sender->getName())->getTimeSinceSent() < Main::$config["faction-invite-length"]) continue;
+            $invites[] = $faction->getName();
+        }
         $sender->sendMessage(Format::PREFIX_FACTIONS . "6Invites: (" . implode(",", $invites) . ")");
     }
 

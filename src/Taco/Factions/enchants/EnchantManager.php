@@ -12,7 +12,7 @@ use pocketmine\item\Tool;
 use pocketmine\item\VanillaItems;
 use pocketmine\Server;
 use Taco\Factions\enchants\commands\GiveEnchantmentBookCommand;
-use Taco\Factions\enchants\enchants\armor\boots\SpringsEnchant;
+use Taco\Factions\enchants\enchants\armor\SpringsEnchant;
 use Taco\Factions\enchants\enchants\sword\SlowEnchant;
 use Taco\Factions\enchants\types\CoreEnchant;
 use Taco\Factions\Main;
